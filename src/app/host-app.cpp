@@ -11,6 +11,7 @@
 typedef void(*executionFunc_t)(gamestate* Gamestate);
 typedef void(*initializeFunc_t)(gamestate* Gamestate);
 
+// loads an .so file (since linux dlopen)
 void* loadlib(const char* libpath)
 {
     void* dll_handle = dlopen(libpath, RTLD_LAZY);
@@ -21,6 +22,7 @@ void* loadlib(const char* libpath)
     return(dll_handle); 
 }
 
+// loads an exported initialize() function from an dynamic lib
 initializeFunc_t loadInit(void*& dll_handle, const char* libpath)
 {
     initializeFunc_t Result = nullptr;
@@ -38,6 +40,7 @@ initializeFunc_t loadInit(void*& dll_handle, const char* libpath)
     return(Result);
 }
 
+// loads an exported execute() function from an dynamic lib
 executionFunc_t loadExecute(void*& dll_handle, const char* libpath)
 {
     executionFunc_t execute = nullptr;
@@ -57,6 +60,7 @@ executionFunc_t loadExecute(void*& dll_handle, const char* libpath)
 
 int main(int argc, char** argv)
 {
+    // Convienance for initSDL_GL_Window
     int windowWidth     = 800;
     int windowHeight    = 600;
 
@@ -72,12 +76,15 @@ int main(int argc, char** argv)
     executionFunc_t execute = nullptr;
     initializeFunc_t initialize = nullptr;
     // Persistent "memory" << Host has to provide any memory, as libs are reallocated if reloaded
+    // Actual game needs more data, plus viewport sizes and stuff (since window is probally resizeable later)
     gamestate Gamestate;
 
+    // loading libs and initializing
     initialize = loadInit(appLib, "./libApp.so");
     execute = loadExecute(appLib, "./libApp.so");
     initialize(&Gamestate);
 
+    // [BEG] Gameloop 
     while(!quitFlag)
     {
         while(SDL_PollEvent(&event))
@@ -91,6 +98,9 @@ int main(int argc, char** argv)
                 break;
             case SDL_KEYDOWN:
                 {
+                    // This code should be replaced by a filewatcher,
+                    // -> watching for compilation of your app-lib so you don't have to rerun loadInit/loadExecute manually
+                    // Though you probally want to execute initialize(..) manually - for reasons
                     if(event.key.state == SDL_PRESSED && event.key.repeat == 0)
                     {
                         if(event.key.keysym.scancode == SDL_SCANCODE_1)
@@ -112,11 +122,11 @@ int main(int argc, char** argv)
         int windowWidth, windowHeight;
         SDL_GetWindowSize(sdl.sdlWindow, &windowWidth, &windowHeight);
 
+        // Advanced tick
         float lastTime = currentTime;
         currentTime = SDL_GetTicks();
         accumulator += (currentTime - lastTime);
 
-        int i =0;
         const float TIMER = 16.0f;
         while(accumulator >= TIMER)
         {
@@ -129,7 +139,7 @@ int main(int argc, char** argv)
         }
 
     }
-
+    // [END] Gameloop
     SDL_GL_DeleteContext(sdl.sdl_glContext);
     SDL_DestroyWindow(sdl.sdlWindow);
 
