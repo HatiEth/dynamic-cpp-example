@@ -20,7 +20,7 @@ FIND_PACKAGE(GLEW REQUIRED)
 
 # compile preprocessor flags
 add_definitions(
-    -DGLEW_STATIC #enable glew-static build
+    #    -DGLEW_STATIC #enable glew-static build
     -DGLM_FORCE_RADIANS
 )
 

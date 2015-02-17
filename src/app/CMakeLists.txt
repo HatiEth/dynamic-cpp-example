@@ -20,7 +20,7 @@ FIND_PACKAGE(GLEW REQUIRED)
 
 # compile preprocessor flags
 add_definitions(
-    -DGLEW_STATIC #enable glew-static build
+    #    -DGLEW_STATIC #enable glew-static build
     -DGLM_FORCE_RADIANS
 )
 
@@ -48,6 +48,7 @@ TARGET_LINK_LIBRARIES(
     ${PROJECT_NAME}
     ${SDL2_LIBRARY}
     ${OPENGL_LIBRARIES}
+    ${GLEW_LIBRARIES}
     ${CMAKE_DL_LIBS}
 )
 

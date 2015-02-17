@@ -2,8 +2,8 @@
 #include <SDL2/SDL.h>
 #include <cassert>
 #include <memory>
-#include <GL/gl.h>
 #include <math.h>
+#include <GL/glew.h>
 #include <dlfcn.h>
 #include "plattformlayer.h"
 
@@ -84,6 +84,7 @@ int main(int argc, char** argv)
     execute = loadExecute(appLib, "./libApp.so");
     initialize(&Gamestate);
 
+
     // [BEG] Gameloop 
     while(!quitFlag)
     {
@@ -103,16 +104,21 @@ int main(int argc, char** argv)
                     // Though you probally want to execute initialize(..) manually - for reasons
                     if(event.key.state == SDL_PRESSED && event.key.repeat == 0)
                     {
-                        if(event.key.keysym.scancode == SDL_SCANCODE_1)
+                        if(event.key.keysym.scancode == SDL_SCANCODE_I)
                         {
                             initialize = loadInit(appLib, "./libApp.so");
                             initialize(&Gamestate);
                             execute = loadExecute(appLib, "./libApp.so");
                         }
-                        if(event.key.keysym.scancode == SDL_SCANCODE_5)
+                        if(event.key.keysym.scancode == SDL_SCANCODE_R)
                         {
                             execute = loadExecute(appLib, "./libApp.so");
                         }
+                        if(event.key.keysym.scancode == SDL_SCANCODE_C)
+                        {
+                            system("ninja all");
+                        }
+
                     }
                 }
                 break;
