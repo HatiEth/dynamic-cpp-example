@@ -64,7 +64,6 @@ int main(int argc, char** argv)
     int windowWidth     = 800;
     int windowHeight    = 600;
 
-
     SDL2 sdl = initSDL_GL_Window(windowWidth, windowHeight);
     SDL_Event event;
     
@@ -106,17 +105,19 @@ int main(int argc, char** argv)
                     {
                         if(event.key.keysym.scancode == SDL_SCANCODE_I)
                         {
+                            system("ninja all"); // replace by your build system
                             initialize = loadInit(appLib, "./libApp.so");
                             initialize(&Gamestate);
                             execute = loadExecute(appLib, "./libApp.so");
                         }
                         if(event.key.keysym.scancode == SDL_SCANCODE_R)
                         {
+                            system("ninja all"); // replace by your build system
                             execute = loadExecute(appLib, "./libApp.so");
                         }
                         if(event.key.keysym.scancode == SDL_SCANCODE_C)
                         {
-                            system("ninja all");
+                            system("ninja all"); // replace by your build system
                         }
 
                     }
@@ -125,8 +126,7 @@ int main(int argc, char** argv)
             }
         }
 
-        int windowWidth, windowHeight;
-        SDL_GetWindowSize(sdl.sdlWindow, &windowWidth, &windowHeight);
+        SDL_GetWindowSize(sdl.sdlWindow, &Gamestate.PhysicalResolution.windowWidth, &Gamestate.PhysicalResolution.windowHeight);
 
         // Advanced tick
         float lastTime = currentTime;

@@ -34,6 +34,7 @@ INCLUDE_DIRECTORIES(
 )
 
 SET(App_HEADERS
+    share/gamestate.h
 )
 
 SET(App_Src_List

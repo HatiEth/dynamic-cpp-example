@@ -15,7 +15,7 @@ SDL2 initSDL_GL_Window(int windowWidth, int windowHeight)
                                      | SDL_INIT_JOYSTICK
                                      | SDL_INIT_GAMECONTROLLER);
     assert(sdl_init_status==0);
-#if __unix__
+#if __unix__ // For personal debug reasons (otherwise destroys splitting)
     sdl.sdlWindow = SDL_CreateWindow("SampleWindow", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WindowFlags::SDL_WINDOW_SHOWN|SDL_WindowFlags::SDL_WINDOW_OPENGL);
 #else
     sdl.sdlWindow = SDL_CreateWindow("SampleWindow", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WindowFlags::SDL_WINDOW_SHOWN|SDL_WindowFlags::SDL_WINDOW_OPENGL|SDL_WindowFlags::SDL_WINDOW_RESIZABLE);
